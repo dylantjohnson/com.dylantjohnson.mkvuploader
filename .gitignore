@@ -1,0 +1,5 @@
+# Local scripts
+*.ps1
+
+# Compiled classes
+classes
