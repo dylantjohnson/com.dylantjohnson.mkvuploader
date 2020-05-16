@@ -15,4 +15,8 @@ public class ApiCredentials {
     public String getClientId() {
         return clientId;
     }
+
+    public String getClientSecret() {
+        return clientSecret;
+    }
 }

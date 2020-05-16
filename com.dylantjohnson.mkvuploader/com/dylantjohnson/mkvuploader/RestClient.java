@@ -1,6 +1,7 @@
 package com.dylantjohnson.mkvuploader;
 
 import com.dylantjohnson.json.*;
+import com.dylantjohnson.mkvuploader.gdrive.*;
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -12,7 +13,7 @@ public class RestClient {
         }
     }
 
-    public static JsonValue post(URL url, Map<String, String> body) throws IOException, ParseException {
+    public static JsonValue post(URL url, Map<String, String> body, Optional<OauthToken> token) throws IOException, ParseException {
         var request = (HttpURLConnection) url.openConnection();
         request.setRequestMethod("POST");
         request.setDoOutput(true);
@@ -27,7 +28,7 @@ public class RestClient {
         try (var bodyStream = new ByteArrayInputStream(encodedBodyBytes); var outputStream = request.getOutputStream()) {
             bodyStream.transferTo(outputStream);
         }
-        try (var inputStream = request.getInputStream()) {
+        try (var inputStream = request.getResponseCode() >= 400 ? request.getErrorStream() : request.getInputStream()) {
             return Parser.parse(inputStream);
         }
     }
